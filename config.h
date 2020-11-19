@@ -42,7 +42,7 @@
   #define DFU 1
 #endif
 
-// if set, debug outputs will be prefixed by "echo: "
+// if set, debug outputs will be prefixed by "echo: " instead of "Boot: "
 #ifndef OUTPUT_ECHO
   #define OUTPUT_ECHO 0
 #endif
@@ -75,8 +75,8 @@
   #define PFX "echo: "
   #define EPFX "error: "
 #else
-  #define PFX
-  #define EPFX
+  #define PFX "Boot: "
+  #define EPFX "Boot-error: "
 #endif
 
 

@@ -27,7 +27,7 @@
  *                                                                            *
  *****************************************************************************/
 
-#define VERSION "1.03 SKR (Michael Moon/Armin Diehl) " __DATE__ " "  __TIME__
+#define VERSION "1.04 SKR"
 
 __attribute__((used)) static const char * version = VERSION;
 
@@ -235,10 +235,12 @@ int main(void)
 #endif
 
 	UART_init(UART_RX, UART_TX, APPBAUD);
-	DBGPRINTF("BL %s %d\n", version, DFU);
 
 	// give SD card time to wake up
-	for (volatile int i = (1UL<<12); i; i--);
+	// AD: the card in the TFT35 needs more time
+	//for (volatile int i = (1UL<<19); i; i--);
+	DBGPRINTF("%s DFU:%d\n", version, DFU);
+	delay_loop(5000000);
 
 // check onboard sd card
 // P0_9: MOSI1 P0_8: MISO1 P0_7: SCK1 P0_6: SSEL1
@@ -264,7 +266,7 @@ int main(void)
 	int dfu = 0;
 	if (dfu_btn_pressed() == 0)
 	{
-//		DBGPRINTF("ISP button pressed");
+		DBGPRINTF("ISP button pressed");
 		dfu = 1;
 	}
 	else if (WDT_ReadTimeOutFlag()) {
