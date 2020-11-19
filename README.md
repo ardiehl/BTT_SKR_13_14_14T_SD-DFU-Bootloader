@@ -1,6 +1,6 @@
 # Bootloader for Bigtreetech SKR 1.3, 1.4 and 1.4 TURBO
 
-This is a fork of https://github.com/triffid/LPC17xx-DFU-Bootloade.
+This is a fork of https://github.com/triffid/LPC17xx-DFU-Bootloader
 
 Supports Bigtreetech SKR 1.3, SKR 1.4 and SKR 1.4 TURBO with the same binary.
 
@@ -78,7 +78,7 @@ GND         GND (J2 Pin 3) or some other GND pin, e.g. middle pin of one endswit
 and run `make upload` or start the `writebootloader` script in bttskr/.
 You can backup your current bootboader or the whole flash using the scripts `readbootloader` or `readflash`.
 
-##Configuration
+## Configuration
 By default, the bootloader will show status/debug messages via the serial port @115200 baud. You can configure these as well as disableing USB, disabling the second SD card and so on in `config.h`.
 
 ## Why
