@@ -63,9 +63,9 @@
   #define BEEPER_PIN	P1_30
 #endif
 
-// SPI speed for SD card, defaults to 4 MHz
+// SPI speed for SD card, defaults to 3 MHz (4 MHz does not work on 1.4 TURBO with BTT TFT-35
 #ifndef SPI_SPEED
-  #define SPI_SPEED 4000000
+  #define SPI_SPEED 3000000
 #endif
 
 

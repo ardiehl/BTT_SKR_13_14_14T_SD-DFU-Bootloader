@@ -98,6 +98,11 @@ void start_dfu(void)
 		usb_task();
 	usb_disconnect();
 }
+#else
+int dfu_btn_pressed(void)
+{
+	return 1;
+}
 #endif
 
 int check_sd_firmware(void)
@@ -202,6 +207,7 @@ static void new_execute_user_code(void)
 int main(void)
 {
 	int flashed;
+	int dfu;
 
 #ifdef BEEPER_PIN
 	GPIO_output(BEEPER_PIN); GPIO_write(BEEPER_PIN,0);
@@ -240,7 +246,11 @@ int main(void)
 	// AD: the card in the TFT35 needs more time
 	//for (volatile int i = (1UL<<19); i; i--);
 	DBGPRINTF("%s DFU:%d\n", version, DFU);
-	delay_loop(5000000);
+
+	// check if dfu button pressed to avoid checking SD card(s)
+	dfu = (dfu_btn_pressed() == 0);
+
+	if (! dfu) delay_loop(5000000);
 
 // check onboard sd card
 // P0_9: MOSI1 P0_8: MISO1 P0_7: SCK1 P0_6: SSEL1
@@ -252,30 +262,31 @@ int main(void)
 #if ENABLED(SD_DISPLAYBOARD)
 // check sd card on display board
 // P0_18: MOSI0 P0_17: MISO0 P0_15: SCK0 P0_16: SSEL0
-	if (!flashed) {
-		SDCard_init(P0_18, P0_17, P0_15, P0_16);
-        	if (SDCard_disk_initialize() == 0)
-                	flashed = check_sd_firmware();
-		else {
-			DBGPRINTF("no sdcard on display board\n");
+	if (! dfu) {		// do not check SD cards if dfu button pressed
+		if (!flashed) {
+			//delay_loop(3000000);
+			SDCard_init(P0_18, P0_17, P0_15, P0_16);
+        		if (SDCard_disk_initialize() == 0)
+                		flashed = check_sd_firmware();
+			else {
+				DBGPRINTF("no sdcard on display board\n");
+			}
 		}
 	}
 #endif  // SD_DISPLAYBOARD
 
 #if ENABLED(DFU)
-	int dfu = 0;
-	if (dfu_btn_pressed() == 0)
+	if (dfu)
 	{
 		DBGPRINTF("ISP button pressed");
-		dfu = 1;
 	}
 	else if (WDT_ReadTimeOutFlag()) {
 		WDT_ClrTimeOutFlag();
 		DBGPRINTF("WATCHDOG reset");
-		dfu = 1;
+		dfu++;
 	} else if (*(uint32_t *)USER_FLASH_START == 0xFFFFFFFF) {
         	DBGPRINTF("User flash empty");
-        	dfu = 1;
+        	dfu++;
 	}
 
 	if (dfu) {
@@ -305,8 +316,7 @@ int main(void)
 	while (UART_busy());
 #endif
 
-	for (volatile int i = (1<<18);i;i--);
-
+	delay_loop(9000000);
 	NVIC_SystemReset();
 }
 
@@ -315,7 +325,7 @@ DWORD get_fattime(void)
 {
 #define	aYEAR	2020
 #define aMONTH	11
-#define aDAY	17
+#define aDAY	20
 #define aHOUR	12
 #define aMINUTE	42
 #define aSECOND	42

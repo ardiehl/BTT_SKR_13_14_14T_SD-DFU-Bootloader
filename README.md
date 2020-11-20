@@ -7,7 +7,7 @@ Supports Bigtreetech SKR 1.3, SKR 1.4 and SKR 1.4 TURBO with the same binary.
 ## SD card support
 By default the SD card (SPI 1) on the SKR as well as the SD card on a connected display board (SPI 0) (if connected) may be used for updating the firmware.
 
-As in the original code a file named "firmware.bin" on the FAT32-formatted SD card's first partition, will be flashed to the application region (0x4000 after the 16k space for the bootloader), and after successful flashing, the file will be renameed to "firmware.cur" - 'cur' meaning 'current'.
+As in the original code a file named "firmware.bin" on the FAT32-formatted SD card's first partition will be flashed to the application region (0x4000 after the 16k space for the bootloader), and after successful flashing, the file will be renamed to "firmware.cur" - 'cur' meaning 'current'.
 
 ## USB support
 

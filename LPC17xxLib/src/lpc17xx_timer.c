@@ -62,7 +62,7 @@ static uint32_t converPtrToTimeNum (LPC_TIM_TypeDef *TIMx);
  **********************************************************************/
 static uint32_t getPClock (uint32_t timernum)
 {
-	uint32_t clkdlycnt;
+	uint32_t clkdlycnt=0;
 	switch (timernum)
 	{
 	case 0:
@@ -99,6 +99,7 @@ uint32_t converUSecToVal (uint32_t timernum, uint32_t usec)
 	clkdlycnt = (uint64_t) getPClock(timernum);
 
 	clkdlycnt = (clkdlycnt * usec) / 1000000;
+
 	return (uint32_t) clkdlycnt;
 }
 

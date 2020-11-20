@@ -53,8 +53,8 @@ __attribute__ ((packed))
 	usbdesc_interface	interface;
 	DFU_functional_descriptor dfufunc;
 	usbdesc_language lang;
-	usbdesc_string_l(12) iManufacturer;
-	usbdesc_string_l(8) iProduct;
+	usbdesc_string_l(11) iManufacturer;
+	usbdesc_string_l(11) iProduct;
 	usbdesc_string_l(12) iInterface;
 	usbdesc_base endnull;
 } DFU_APP_Descriptor;
@@ -112,12 +112,19 @@ DFU_APP_Descriptor desc =
 		{ SL_USENGLISH }
 	},
 #ifndef __CC_ARM
-	usbstring(12, "SmoothieWare"),
-	usbstring(8 , "Smoothie"),
+	//usbstring(12, "SmoothieWare"),
+	usbstring(11, "Bigtreetech"),
+
+	//usbstring(8 , "Smoothie"),
+	usbstring(11 ,  "SKR 1.3/1.4"),
 	usbstring(12, "Smoothie DFU"),
 #else
-    { 2 + 2 * 12, DT_STRING, 'S', 'm', 'o', 'o', 't', 'h', 'i', 'e', 'W', 'a', 'r', 'e' },
-    { 2 + 2 * 8,  DT_STRING, 'S', 'm', 'o', 'o', 't', 'h', 'i', 'e' },
+    //{ 2 + 2 * 12, DT_STRING, 'S', 'm', 'o', 'o', 't', 'h', 'i', 'e', 'W', 'a', 'r', 'e' },
+    { 2 + 2 * 11, DT_STRING, 'B', 'i', 'g', 't', 'r', 'e', 'e', 't', 'e', 'c', 'h' },
+
+    //{ 2 + 2 * 8,  DT_STRING, 'S', 'm', 'o', 'o', 't', 'h', 'i', 'e' },
+    { 2 + 2 * 8,  DT_STRING, 'S', 'K', 'R', ' ', '1', '.', 'x', ' ' },
+
     { 2 + 2 * 12, DT_STRING, 'S', 'm', 'o', 'o', 't', 'h', 'i', 'e', ' ', 'D', 'F', 'U' },
 #endif
 	{

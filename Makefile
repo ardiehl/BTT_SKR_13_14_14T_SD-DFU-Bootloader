@@ -7,7 +7,7 @@
 
 PROJECT  = DFU-Bootloader
 
-CONSOLE  = /dev/arduino
+CONSOLE  = /dev/ttyUSB0
 
 CSRC     = $(wildcard *.c)
 CXXSRC   = $(wildcard *.cpp)
@@ -58,7 +58,7 @@ OPTIMIZE = s
 #DEBUG_MESSAGES
 CDEFS    = MAX_URI_LENGTH=512 __LPC17XX__ USB_DEVICE_ONLY
 
-FLAGS    = -O$(OPTIMIZE) -mcpu=$(MCU) -mthumb -mthumb-interwork -mlong-calls -ffunction-sections -fdata-sections -Wall -g -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wno-address-of-packed-member
+FLAGS    = -O$(OPTIMIZE) -mcpu=$(MCU) -mthumb -mthumb-interwork -mlong-calls -ffunction-sections -fdata-sections -Wall -g -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wno-address-of-packed-member -Wno-unused-but-set-variable
 FLAGS   += $(patsubst %,-I%,$(INC))
 FLAGS   += $(patsubst %,-D%,$(CDEFS))
 CFLAGS   = $(FLAGS) -std=gnu99 -pipe -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vfprintf -fno-builtin-puts
