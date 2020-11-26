@@ -264,7 +264,6 @@ int main(void)
 // P0_18: MOSI0 P0_17: MISO0 P0_15: SCK0 P0_16: SSEL0
 	if (! dfu) {		// do not check SD cards if dfu button pressed
 		if (!flashed) {
-			//delay_loop(3000000);
 			SDCard_init(P0_18, P0_17, P0_15, P0_16);
         		if (SDCard_disk_initialize() == 0)
                 		flashed = check_sd_firmware();

@@ -32,6 +32,7 @@
 
 //static const uint8_t OXFF = 0xFF;
 
+//#define debug
 
 int SDCard__cmd(int cmd, int arg);
 int SDCard__cmdx(int cmd, int arg);
@@ -155,14 +156,18 @@ int SDCard_initialise_card() {
 
     // send CMD0, should return with all zeros except IDLE STATE set (bit 0)
     if(SDCard__cmd(SDCMD_GO_IDLE_STATE, 0) != R1_IDLE_STATE) {
-        //DBGPRINTF("Could not put SD card in to SPI idle state\n");
+#ifdef debug
+        DBGPRINTF("Could not put SD card in to SPI idle state\n");
+#endif
         return cardtype = SDCARD_FAIL;
     }
 
     // send CMD8 to determine whether it is ver 2.x
     int r = SDCard__cmd8();
     if(r == R1_IDLE_STATE) {
- //		DBGPRINTF("Looks like a SDHC Card\n");
+#ifdef debug
+		DBGPRINTF("Looks like a SDHC Card\n");
+#endif
 		return SDCard_initialise_card_v2();
     } else if(r == (R1_IDLE_STATE | R1_ILLEGAL_COMMAND)) {
 		return SDCard_initialise_card_v1();
@@ -427,8 +432,9 @@ uint32_t SDCard_disk_blocksize() { return (1<<9); }
 int SDCard__cmd(int cmd, int arg) {
 //     _cs = 0;
 	GPIO_clear(_cs);
-
-// 	printf("SDCMD:%u ", cmd);
+#ifdef debug
+    DBGPRINTF("SDCMD:%u ", cmd);
+#endif
 
     // send a command
     SPI_write(0x40 | cmd);
@@ -444,12 +450,14 @@ int SDCard__cmd(int cmd, int arg) {
         if(!(response & 0x80)) {
             GPIO_set(_cs);
             SPI_write(0xFF);
-// 			printf(" <%u\n", response);
+#ifdef debug
+	    printf(" <%u\n", response);
+#endif
             return response;
         }
     }
-#if ENABLED(DEBUG_MESSAGES)
-	//DBGPRINTF_E("Timeout\n");
+#ifdef debug
+    printf("Timeout\n");
 #endif
 //     _cs = 1;
 	GPIO_set(_cs);
@@ -460,9 +468,10 @@ int SDCard__cmdx(int cmd, int arg) {
 //     _cs = 0;
 	GPIO_clear(_cs);
 
-// 	printf("SDCMDx:%u ", cmd);
-
-	// send a command
+#ifdef debug
+    DBGPRINTF("SDCMDx:%u ", cmd);
+#endif
+    // send a command
     SPI_write(0x40 | cmd);
     SPI_write(arg >> 24);
     SPI_write(arg >> 16);
@@ -474,13 +483,17 @@ int SDCard__cmdx(int cmd, int arg) {
     for(int i=0; i<SD_COMMAND_TIMEOUT; i++) {
         int response = SPI_write(0xFF);
         if(!(response & 0x80)) {
-// 			printf(" <%u\n", response);
+#ifdef debug
+	    DBGPRINTF(" <%u\n", response);
+#endif
             return response;
         }
     }
-	//DBGPRINTF_E("Timeout\n");
+#ifdef debug
+    DBGPRINTF_E("Timeout\n");
+#endif
 //     _cs = 1;
-	GPIO_set(_cs);
+    GPIO_set(_cs);
     SPI_write(0xFF);
     return -1; // timeout
 }

@@ -98,6 +98,10 @@ clean:
 program: $(OUTDIR)/$(PROJECT).bin
 	openocd -f bttskr/lpc17xx-stlink-v2.cfg -c "flash write_image erase $(OUTDIR)/$(PROJECT).bin 0x0" -c "reset run" -c "exit"
 
+hex: $(OUTDIR)/$(PROJECT).bin $(OUTBINDIR)
+	objcopy -I binary -O ihex $(OUTDIR)/$(PROJECT).bin $(OUTBINDIR)/$(PROJECT).hex
+
+	
 upload: program
 
 flash:	program
